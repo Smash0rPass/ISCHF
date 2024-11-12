@@ -46,8 +46,8 @@ local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/d
 local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
 
 local Window = Fluent:CreateWindow({
-    Title = "Fisch | Space Hub",
-    SubTitle = "v1.6",
+    Title = "Fisch | Zaza Hub",
+    SubTitle = "v2.1",
     TabWidth = 150,
     Size = UDim2.fromOffset(600, 400),
     Acrylic = true,
@@ -74,8 +74,10 @@ local teleportSpots = {
     arch = CFrame.new(998.966796875, 126.6849365234375, -1237.1434326171875),
     birch = CFrame.new(1742.3203125, 138.25787353515625, -2502.23779296875),
     brine = CFrame.new(-1794.10596, -145.849701, -3302.92358, -5.16176224e-05, 3.10316682e-06, 0.99999994, 0.119907647, 0.992785037, 3.10316682e-06, -0.992785037, 0.119907647, -5.16176224e-05),
-    deep = CFrame.new(-1510.88672, -237.695053, -2852.90674, 0.573604643, 0.000580655003, 0.81913209, -0.000340352941, 0.999999762, -0.000470530824, -0.819132209, -8.89541116e-06, 0.573604763),
-    deepshop = CFrame.new(-979.196411, -247.910156, -2699.87207, 0.587748766, 0, 0.809043527, 0, 1, 0, -0.809043527, 0, 0.587748766),
+    desolate_deep = CFrame.new(-1510.88672, -237.695053, -2852.90674, 0.573604643, 0.000580655003, 0.81913209, -0.000340352941, 0.999999762, -0.000470530824, -0.819132209, -8.89541116e-06, 0.573604763),
+    desolate_deep_shop = CFrame.new(-979.196411, -247.910156, -2699.87207, 0.587748766, 0, 0.809043527, 0, 1, 0, -0.809043527, 0, 0.587748766),
+    forsaken_shores = CFrame.new(-2489.40918, 129.934937, 1566.6665, 0, 0, -1, 0, 1, 0, 1, 0, 0),
+    forsaken_shores_pond = CFrame.new(-2690.992919921875, 164.75003051757812, 1729.8953857421875),
     enchant = CFrame.new(1296.320068359375, -808.5519409179688, -298.93817138671875),
     executive = CFrame.new(-29.836761474609375, -250.48486328125, 199.11614990234375),
     keepers = CFrame.new(1296.320068359375, -808.5519409179688, -298.93817138671875),
@@ -333,10 +335,14 @@ function ZoneCasting()
                                     bobberPosition = CFrame.new(selectedZone.Position.X, 126, selectedZone.Position.Z)
                                 elseif selectedZoneCast == "Deep Ocean" then
                                     bobberPosition = CFrame.new(1521, 126, -3543)
-				elseif selectedZoneCast == "Brine Pool" then
+				                elseif selectedZoneCast == "Brine Pool" then
                                     bobberPosition = CFrame.new(-1765, -172, -3480)
                                 elseif selectedZoneCast == "Desolate Deep" then
                                     bobberPosition = CFrame.new(-1484, -332, -2839)
+                                elseif selectedZoneCast == "Forsaken Shores" then
+                                    bobberPosition = CFrame.new(-2415, 30, 1568)
+                                elseif selectedZoneCast == "Forsaken Shores Pond" then
+                                    bobberPosition = CFrame.new(-2682, 126, 1747)
                                 elseif selectedZoneCast == "Harvesters Spike" then
                                     bobberPosition = CFrame.new(-1234, 126, 1748)
                                 elseif selectedZoneCast == "Moosewood Docks" then
@@ -718,7 +724,7 @@ do
     end)
     local DropdownZoneCast = Tabs.Premium:AddDropdown("DropdownZoneCast", {
         Title = "Select zone to cast anywhere",
-        Values = {"FischFright24", "Isonade", "Bluefin Tuna Abundance", "", "Deep Ocean", "Brine Pool", "Desolate Deep", "Harvesters Spike", "Moosewood Docks", "Moosewood Ocean", "Moosewood Ocean Mythical", "Moosewood Pond", "Mushgrove Water", "Ocean", "Roslit Bay", "Roslit Bay Ocean", "Roslit Pond", "Roslit Pond Seaweed", "Scallop Ocean", "Snowcap Ocean", "Snowcap Pond", "Sunstone", "Terrapin Ocean", "The Arch", "Vertigo"},
+        Values = {"FischFright24", "Isonade", "Bluefin Tuna Abundance", "", "Deep Ocean", "Brine Pool", "Desolate Deep", "Forsaken Shores", "Forsaken Shores Pond", "Harvesters Spike", "Moosewood Docks", "Moosewood Ocean", "Moosewood Ocean Mythical", "Moosewood Pond", "Mushgrove Water", "Ocean", "Roslit Bay", "Roslit Bay Ocean", "Roslit Pond", "Roslit Pond Seaweed", "Scallop Ocean", "Snowcap Ocean", "Snowcap Pond", "Sunstone", "Terrapin Ocean", "The Arch", "Vertigo"},
         Multi = false,
     })
     DropdownZoneCast:OnChanged(function(Value)
@@ -871,7 +877,7 @@ do
 
     local DropdownPlace = Tabs.Teleports:AddDropdown("DropdownPlace", {
         Title = "Place teleport",
-        Values = {"altar", "arch", "birch", "brine", "deep", "deepshop", "enchant", "keepers", "mod_house", "moosewood", "mushgrove", "roslit", "snow", "snowcap", "spike", "statue", "sunstone", "swamp", "terrapin", "trident", "vertigo", "volcano", "wilson", "wilsons_rod"},
+        Values = {"altar", "arch", "birch", "brine", "desolate_deep", "desolate_deep_shop", "forsaken_shores", "forsaken_shores_pond", "enchant", "keepers", "mod_house", "moosewood", "mushgrove", "roslit", "snow", "snowcap", "spike", "statue", "sunstone", "swamp", "terrapin", "trident", "vertigo", "volcano", "wilson", "wilsons_rod"},
         Multi = false,
     })
     DropdownPlace:OnChanged(function(Value)
