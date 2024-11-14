@@ -34,39 +34,6 @@ local locationsMenuOpen = false
 local lastMainFramePosition = nil
 local menuUpdateConnection = nil
 
--- Zone casting variables
-local selectedZoneCast = nil
-local AutoZoneCast = false
-local zonesMenu = nil
-local zonesMenuOpen = false
-
--- Available fishing zones
-local FishingZones = {
-    "Deep Ocean",
-    "Brine Pool",
-    "Desolate Deep",
-    "Forsaken Shores",
-    "Forsaken Shores Pond",
-    "Harvesters Spike",
-    "Moosewood Docks",
-    "Moosewood Ocean",
-    "Moosewood Ocean Mythical",
-    "Moosewood Pond",
-    "Mushgrove Water",
-    "Ocean",
-    "Roslit Bay",
-    "Roslit Bay Ocean",
-    "Roslit Pond",
-    "Roslit Pond Seaweed",
-    "Scallop Ocean",
-    "Snowcap Ocean",
-    "Snowcap Pond",
-    "Sunstone",
-    "Terrapin Ocean",
-    "The Arch",
-    "Vertigo"
-}
-
 
 --Custom Locations
 local FishAreas = {
@@ -208,139 +175,6 @@ local function teleportToSpawn(spawnPart)
         end
     end
 end
-
--- Function to get zone position
-local function getZonePosition(zoneName)
-    -- Add zone position mappings
-    local ZonePositions = {
-        ["Deep Ocean"] = Vector3.new(1521, 126, -3543),
-        ["Brine Pool"] = Vector3.new(-1765, -172, -3480),
-        ["Desolate Deep"] = Vector3.new(-1484, -332, -2839),
-        ["Forsaken Shores"] = Vector3.new(-2415, 30, 1568),
-        ["Forsaken Shores Pond"] = Vector3.new(-2682, 126, 1747),
-        ["Harvesters Spike"] = Vector3.new(-1234, 126, 1748),
-        ["Moosewood Docks"] = Vector3.new(345, 126, 214),
-        ["Moosewood Ocean"] = Vector3.new(890, 126, 465),
-        ["Moosewood Ocean Mythical"] = Vector3.new(270, 126, 52),
-        ["Moosewood Pond"] = Vector3.new(526, 126, 305),
-        ["Mushgrove Water"] = Vector3.new(2541, 126, -792),
-        ["Ocean"] = Vector3.new(-5712, 126, 4059),
-        ["Roslit Bay"] = Vector3.new(-1650, 126, 504),
-        ["Roslit Bay Ocean"] = Vector3.new(-1825, 126, 946),
-        ["Roslit Pond"] = Vector3.new(-1807, 141, 599),
-        ["Roslit Pond Seaweed"] = Vector3.new(-1804, 141, 625),
-        ["Scallop Ocean"] = Vector3.new(16, 126, 730),
-        ["Snowcap Ocean"] = Vector3.new(2308, 126, 2200),
-        ["Snowcap Pond"] = Vector3.new(2777, 275, 2605),
-        ["Sunstone"] = Vector3.new(-645, 126, -955),
-        ["Terrapin Ocean"] = Vector3.new(-57, 126, 2011),
-        ["The Arch"] = Vector3.new(1076, 126, -1202),
-        ["Vertigo"] = Vector3.new(-75, -740, 1200)
-    }
-    
-    return ZonePositions[zoneName]
-end
-
--- Function to create ZoneMenu
-local function createZonesMenu(parentFrame)
-    if zonesMenu then zonesMenu:Destroy() end
-    
-    zonesMenu = Instance.new("Frame")
-    zonesMenu.Name = "ZonesMenu"
-    zonesMenu.Size = UDim2.new(0, 200, 0, 300)
-    zonesMenu.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-    zonesMenu.BorderSizePixel = 0
-    
-    local viewportSize = workspace.CurrentCamera.ViewportSize
-    local isOnLeftSide = parentFrame.AbsolutePosition.X < viewportSize.X / 2
-    local baseOffset = 10
-    local position
-    
-    if isOnLeftSide then
-        position = parentFrame.AbsolutePosition.X + parentFrame.AbsoluteSize.X + baseOffset
-        if spawnMenu and spawnMenu.Parent then
-            position = position + spawnMenu.AbsoluteSize.X + baseOffset
-        end
-        if locationsMenu and locationsMenu.Parent then
-            position = position + locationsMenu.AbsoluteSize.X + baseOffset
-        end
-    else
-        position = parentFrame.AbsolutePosition.X - 200 - baseOffset
-        if spawnMenu and spawnMenu.Parent then
-            position = position - spawnMenu.AbsoluteSize.X - baseOffset
-        end
-        if locationsMenu and locationsMenu.Parent then
-            position = position - locationsMenu.AbsoluteSize.X - baseOffset
-        end
-    end
-    
-    zonesMenu.Position = UDim2.new(0, position, 0, parentFrame.AbsolutePosition.Y)
-    
-    local corner = Instance.new("UICorner")
-    corner.CornerRadius = UDim.new(0, 10)
-    corner.Parent = zonesMenu
-    
-    local title = Instance.new("TextLabel")
-    title.Name = "Title"
-    title.Size = UDim2.new(1, 0, 0, 30)
-    title.BackgroundTransparency = 1
-    title.Text = "Fishing Zones"
-    title.TextColor3 = Color3.fromRGB(255, 255, 255)
-    title.TextSize = 14
-    title.Font = Enum.Font.GothamBold
-    title.Parent = zonesMenu
-    
-    local scrollFrame = Instance.new("ScrollingFrame")
-    scrollFrame.Name = "ScrollFrame"
-    scrollFrame.Size = UDim2.new(1, -10, 1, -40)
-    scrollFrame.Position = UDim2.new(0, 5, 0, 35)
-    scrollFrame.BackgroundTransparency = 1
-    scrollFrame.BorderSizePixel = 0
-    scrollFrame.ScrollBarThickness = 4
-    scrollFrame.Parent = zonesMenu
-    
-    local listLayout = Instance.new("UIListLayout")
-    listLayout.Parent = scrollFrame
-    listLayout.Padding = UDim.new(0, 5)
-    listLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
-    
-    for _, zoneName in ipairs(FishingZones) do
-        local button = Instance.new("TextButton")
-        button.Size = UDim2.new(0.9, 0, 0, 25)
-        button.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-        button.Text = zoneName
-        button.TextColor3 = Color3.fromRGB(255, 255, 255)
-        button.TextSize = 12
-        button.Font = Enum.Font.GothamMedium
-        button.BorderSizePixel = 0
-        
-        local buttonCorner = Instance.new("UICorner")
-        buttonCorner.CornerRadius = UDim.new(0, 6)
-        buttonCorner.Parent = button
-        
-        button.MouseButton1Click:Connect(function()
-            selectedZoneCast = zoneName
-            AutoZoneCast = true
-            -- Update all buttons
-            for _, child in ipairs(scrollFrame:GetChildren()) do
-                if child:IsA("TextButton") then
-                    child.BackgroundColor3 = child.Text == zoneName and 
-                        Color3.fromRGB(40, 173, 40) or 
-                        Color3.fromRGB(40, 40, 40)
-                end
-            end
-        end)
-        
-        button.Parent = scrollFrame
-    end
-    
-    listLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
-        scrollFrame.CanvasSize = UDim2.new(0, 0, 0, listLayout.AbsoluteContentSize.Y)
-    end)
-    
-    zonesMenu.Parent = parentFrame.Parent
-end
-
 
 -- Function to create spawn menu
 local function createSpawnMenu(parentFrame)
@@ -798,25 +632,13 @@ local function handleFishing()
     -- Check if bobber exists and enough time has passed since last cast
     local bobber = equippedTool:FindFirstChild("bobber")
     if not bobber and tick() - lastCastTime >= CAST_COOLDOWN then
-        -- Use selected zone if available
-        if selectedZoneCast and AutoZoneCast then
-            local zonePos = getZonePosition(selectedZoneCast)
-            if zonePos then
-                -- Teleport to zone position before casting
-                local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
-                if humanoidRootPart then
-                    humanoidRootPart.CFrame = CFrame.new(zonePos)
-                end
-            end
-        end
-        
         local args = {
             [1] = math.random(90, 100),
             [2] = 1
         }
         equippedTool.events.cast:FireServer(unpack(args))
         lastCastTime = tick()
-        task.wait(0.5)
+        task.wait(0.5)  -- Wait after casting to prevent spam
     end
 end
 
@@ -928,36 +750,6 @@ local function createGui()
     locationsCorner.CornerRadius = UDim.new(0, 6)
     locationsCorner.Parent = locationsButton
     locationsButton.Parent = mainFrame
-
-
-
-    local zonesButton = Instance.new("TextButton")
-    zonesButton.Name = "ZonesButton"
-    zonesButton.Size = UDim2.new(0.8, 0, 0, 25)
-    zonesButton.Position = UDim2.new(0.1, 0, 0.90, 0) -- Adjusted position
-    zonesButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-    zonesButton.Text = "Fishing Zones"
-    zonesButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-    zonesButton.TextSize = 12
-    zonesButton.Font = Enum.Font.GothamMedium
-    zonesButton.BorderSizePixel = 0
-    
-    local zonesCorner = Instance.new("UICorner")
-    zonesCorner.CornerRadius = UDim.new(0, 6)
-    zonesCorner.Parent = zonesButton
-    zonesButton.Parent = mainFrame
-    
-    zonesButton.MouseButton1Click:Connect(function()
-        zonesMenuOpen = not zonesMenuOpen
-        if zonesMenuOpen then
-            createZonesMenu(mainFrame)
-        else
-            if zonesMenu then
-                zonesMenu:Destroy()
-                zonesMenu = nil
-            end
-        end
-    end)
 
     -- Move destroy button down
     local destroyButton = Instance.new("TextButton")
