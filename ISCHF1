@@ -37,6 +37,8 @@ local menuUpdateConnection = nil
 
 --Custom Locations
 local FishAreas = {
+    ["Hexed Rune"] = CFrame.new(1051, -632, 1319),
+    ["Abyssal Rune"] = CFrame.new(1207, -716, 1318),
     ["Moosewood"] = CFrame.new(370, 134, 223),
     ["Mushgrove Swamp"] = CFrame.new(2441, 131, -683),
     ["Mushgrove Aligator"] = CFrame.new(2661, 133, -748),
@@ -57,6 +59,7 @@ local FishAreas = {
     ["Gamma Grotto"] = CFrame.new(2234, -804, 1010),
     ["Haddock Rock"] = CFrame.new(-547, 156, -464),
     ["The Arch"] = CFrame.new(998.966796875, 126.6849365234375, -1237.1434326171875),
+    ["The Depths"] = CFrame.new(619, -734, 1161),
     ["Executive"] = CFrame.new(-29.836761474609375, -250.48486328125, 199.11614990234375),
     ["Keepers Altar"] = CFrame.new(1296.320068359375, -808.5519409179688, -298.93817138671875),
     ["Mod's House"] = CFrame.new(-30.205902099609375, -249.40594482421875, 204.0529022216797)
@@ -89,6 +92,7 @@ local NpcsPeople = {
 }
 
 local ItemsLocation = {
+    ["Rod Of The Depths"] = CFrame.new(1704, -903, 1443),
     ["Advanced Diving Gear"] = CFrame.new(-978, -245, -2689),
     ["Aurora Rod"] = CFrame.new(-144, -515, 1132),
     ["Bait Crate"] = CFrame.new(-987, -245, -2702),
@@ -116,6 +120,8 @@ local ItemsLocation = {
 
 --Locations order
 local ZonesOrder = {
+"Hexed Rune",
+"Abyssal Rune",
 "Moosewood",
 "Mushgrove Swamp",
 "Mushgrove Aligator",
@@ -136,6 +142,7 @@ local ZonesOrder = {
 "Gamma Grotto",
 "Haddock Rock",
 "The Arch",
+"The Depths",
 "Executive",
 "Keepers Altar",
 "Mod's House"
@@ -169,6 +176,7 @@ local NpcsOrder = {
 }
 
 local ItemsOrder = {
+"Rod Of The Depths",
 "Advanced Diving Gear",
 "Aurora Rod",
 "Bait Crate",
@@ -655,12 +663,12 @@ local function handleFishing()
     if not character then return end
     
     local equippedTool = character:FindFirstChildWhichIsA("Tool")
-    if not equippedTool or not equippedTool.Name:match("Rod$") then return end
+    -- Change the check to look for "Rod" anywhere in the name
+    if not equippedTool or not string.find(equippedTool.Name, "Rod") then return end
     
-    -- Check for reel UI first
+    -- Rest of the function remains the same
     handleReel()
     
-    -- Check if bobber exists and enough time has passed since last cast
     local bobber = equippedTool:FindFirstChild("bobber")
     if not bobber and tick() - lastCastTime >= CAST_COOLDOWN then
         local args = {
@@ -669,7 +677,7 @@ local function handleFishing()
         }
         equippedTool.events.cast:FireServer(unpack(args))
         lastCastTime = tick()
-        task.wait(0.5)  -- Wait after casting to prevent spam
+        task.wait(0.5)
     end
 end
 
