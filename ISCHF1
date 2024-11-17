@@ -17,7 +17,7 @@ local startPos
 local previousTool = nil
 local isProcessingMap = false
 local lastCastTime = 0
-local CAST_COOLDOWN = 2  -- 2 second cooldown between casts
+local CAST_COOLDOWN = 0  -- 2 second cooldown between casts
 
 -- Position tracking
 local savedPosition = nil
@@ -37,6 +37,10 @@ local menuUpdateConnection = nil
 
 --Custom Locations
 local FishAreas = {
+    ["Ancient Depth Serpent #1"] = CFrame.new(1231, -735, 1201),
+    ["Ancient Depth Serpent #2"] = CFrame.new(1103, -741, 1446),
+    ["Ancient Depth Serpent #3"] = CFrame.new(1093, -738, 1087),
+    ["Ancient Depth Serpent #4"] = CFrame.new(684, -742, 1154),
     ["Hexed Rune"] = CFrame.new(1051, -632, 1319),
     ["Abyssal Rune"] = CFrame.new(1207, -716, 1318),
     ["Moosewood"] = CFrame.new(370, 134, 223),
